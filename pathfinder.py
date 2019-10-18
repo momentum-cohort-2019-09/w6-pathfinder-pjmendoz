@@ -20,22 +20,21 @@ class Map:
         self.elevations = [[int(each) for each in line.split()] for line in self.text_contents.split("\n")]
     
     def find_min_and_max(self):
-
         self.min_elevation = self.elevations[0][0]
         self.max_elevation = self.elevations[0][0]
 
         for each in self.elevations: 
             for integer in each:   
                 if integer < self.min_elevation: 
-                    self.min_evaluation = integer
+                    self.min_elevation = integer
                 if integer > self.max_elevation: 
-                    self.max_evaluation = integer           
+                    self.max_elevation = integer           
 
     def get_colors_from_elevations(self):
-
         for rows in self.elevations: 
             for number in rows: 
-                color_int = round(((number - self.min_evaluation) / (self.max_evaluation - self.min_evaluation)) * 255)
+                color_int = round(
+                    ((number - self.min_elevation) / (self.max_elevation - self.min_elevation)) * 255)
                 self.little_rows_of_colors.append(color_int)    
             self.colors_big_list.append(self.little_rows_of_colors)
             self.little_rows_of_colors = []
