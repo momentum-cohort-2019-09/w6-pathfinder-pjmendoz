@@ -1,37 +1,48 @@
 from PIL import Image
 
-im = Image.new('RGB', (600, 600), 'black')
-im.save('map.png')
+class Map: 
 
-def read_word_list(filename): 
+    def _init_(self, file):
+        self.file = file
 
-    with open(filename) as file:   
-        data = file.read()
-        data_points = [[int(x) for x in line.split()] for line in data.split("\n")]
+    def read_file(self, file): 
 
-    min = data_points[0][0]
-    max = data_points[0][0]
+        with open(file) as text_file:   
+            text_contents = text_file.read()
 
-    for x in data_points: 
-        for integer in x:   
-            if integer < min: 
-                min = integer
-            if integer > max: 
-                max = integer           
+        self.elevations = [[int(x) for x in line.split()] for line in text_contents.split("\n")]
+    
+    def find_min_and_max(self):
 
-    colors_big_list = []
-    little_rows_of_colors = []
+        min = self.elevations[0][0]
+        max = self.elevations[0][0]
 
-    for rows in data_points: 
-        for number in rows: 
-            color_int = round(((number - min) / (max-min)) * 255)
-            little_rows_of_colors.append(color_int)    
-        colors_big_list.append(little_rows_of_colors)
+        for x in self.elevations: 
+            for integer in x:   
+                if integer < min: 
+                    min = integer
+                if integer > max: 
+                    max = integer           
+
+    def create_color_list(self):
+        colors_big_list = []
         little_rows_of_colors = []
 
-    print(colors_big_list[0][0])
-    print(len(colors_big_list[0]))       
-    return data
+        for rows in self.elevations: 
+            for number in rows: 
+                color_int = round(((number - min) / (max-min)) * 255)
+                little_rows_of_colors.append(color_int)    
+            colors_big_list.append(little_rows_of_colors)
+            little_rows_of_colors = []
+     
+    def create_map_image(self):
+        im = Image.new('RGB', (600, 600), 'black')
+        im.save('map.png')
 
-read_word_list("elevation_small.txt")    
+
+if __name__ == "__main__":
+    map = Map("elevation_small.txt")
+
+
+      
 
